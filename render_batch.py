@@ -58,14 +58,18 @@ def render(row: dict[str, str], config: dict, force: bool) -> str:
     customer = escape_drawtext(row["customer_name"])
     font_path = str(font).replace("\\", "/").replace(":", r"\:")
     filters = (
-        "[1:v]scale=220:-1[logo];"
-        "[0:v][logo]overlay=W-w-40:40:enable='between(t,0.5,2.8)'[v1];"
-        f"[v1]drawtext=fontfile='{font_path}':text='{customer}':"
-        "fontcolor=white:fontsize=44:box=1:boxcolor=black@0.55:boxborderw=18:"
-        "x=(w-text_w)/2:y=h-text_h-70:enable='between(t,1.2,3.8)'[v2];"
-        f"[v2]drawtext=fontfile='{font_path}':text='Prepared for {customer}':"
-        "fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2:"
-        "alpha='if(lt(t,4),0,min(1,(t-4)/0.5))':enable='between(t,4,5.8)'[vout]"
+        "[1:v]scale=250:-1,split=2[logo_main][logo_outro];"
+        "[0:v][logo_main]overlay=W-w-75:75:enable='between(t,1,6.8)'[v1];"
+        f"[v1]drawtext=fontfile='{font_path}':text='PERSONALIZED FOR':"
+        "fontcolor=#5DD9C1:fontsize=28:x=135:y=505:enable='between(t,1.5,6.8)'[v2];"
+        f"[v2]drawtext=fontfile='{font_path}':text='{customer}':"
+        "fontcolor=white:fontsize=58:box=1:boxcolor=#0A1424@0.85:boxborderw=20:"
+        "x=125:y=545:enable='between(t,1.5,6.8)'[v3];"
+        "[v3]drawbox=x=0:y=0:w=iw:h=ih:color=#07111F@0.96:t=fill:enable='between(t,7,10)'[v4];"
+        "[v4][logo_outro]overlay=(W-w)/2:(H-h)/2-90:enable='between(t,7,10)'[v5];"
+        f"[v5]drawtext=fontfile='{font_path}':text='Prepared exclusively for {customer}':"
+        "fontcolor=white:fontsize=48:x=(w-text_w)/2:y=(h-text_h)/2+95:"
+        "alpha='if(lt(t,7),0,min(1,(t-7)/0.45))':enable='between(t,7,10)'[vout]"
     )
     command = [
         ffmpeg(), "-y", "-i", str(master), "-i", str(logo),
